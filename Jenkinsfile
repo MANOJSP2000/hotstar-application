@@ -67,7 +67,7 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name hotstar -p 3000:3000 sarvjeet908/hotstar:2'
+                sh 'docker run -d --name hotstar -p 3000:80 sarvjeet908/hotstar:2'
             }
         }
 
