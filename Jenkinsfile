@@ -69,7 +69,7 @@ pipeline{
         }
       /*  stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name hotstar -p 80:80 sarvjeet908/hotstar:2'
+                sh 'docker run -d --name hotstar -p 80:80 manojsp2000/hotstar:2'
             }
         }
      * /
