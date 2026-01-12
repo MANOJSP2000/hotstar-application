@@ -75,26 +75,28 @@ pipeline{
      * /
        /* ---------- NEW SECTION FOR DIRECT EKS DEPLOYMENT ---------- */
 
-        stage('Configure Kubeconfig for EKS') {
-            steps {
-                sh '''
-                    aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
-                    kubectl get nodes
-                '''
-            }
+stage('Configure Kubeconfig for EKS') {
+    steps {
+        withAWS(credentials: 'aws', region: "${env.AWS_DEFAULT_REGION}") {
+            sh """
+                aws eks --region ${env.AWS_DEFAULT_REGION} update-kubeconfig --name ${env.CLUSTER_NAME}
+                kubectl get nodes
+            """
         }
-
-        stage('Deploy to EKS') {
-            steps {
-                sh '''
-                    echo "Applying Kubernetes manifests..."
-                    kubectl apply -f K8S/
-                '''
-            }
-        }
-
-
     }
+}
+
+stage('Deploy to EKS') {
+    steps {
+        withAWS(credentials: 'aws', region: "${env.AWS_DEFAULT_REGION}") {
+            sh """
+                echo "Applying Kubernetes manifests..."
+                kubectl apply -f K8S/
+            """
+        }
+    }
+}
+
     post {
     always {
         script {
